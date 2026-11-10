@@ -1,0 +1,176 @@
+{
+  "profile": {
+    "name": "김동영",
+    "username": "dongyoung",
+    "bio": "사람의 심리를 읽고, 브랜드의 이야기를 기획하는 광고·마케팅 기획자",
+    "tagline": "사람을 관찰하고, 마음을 읽고, 브랜드의 이야기를 기획합니다.",
+    "email": "ehrtnfl9700@gmail.com",
+    "avatar": "/cat-avatar.svg"
+  },
+  "links": [
+    {
+      "id": "link-1",
+      "title": "깃허브",
+      "url": "https://github.com/cokecoke01/-_-",
+      "icon": "github",
+      "description": "GitHub 저장소 및 프로젝트 코드",
+      "clicks": 3,
+      "order": 0,
+      "createdAt": "2026-11-03T11:32:42.269Z"
+    },
+    {
+      "id": "link-2",
+      "title": "구글",
+      "url": "https://google.com",
+      "icon": "google",
+      "description": "구글 검색 및 공식 프로필",
+      "clicks": 2,
+      "order": 1,
+      "createdAt": "2026-11-03T11:32:42.269Z"
+    },
+    {
+      "id": "link-3",
+      "title": "내 블로그",
+      "url": "https://blog.naver.com/ehrtnfl9700",
+      "icon": "blog",
+      "description": "네이버 블로그 (인사이트 및 기획 일기)",
+      "clicks": 5,
+      "order": 2,
+      "createdAt": "2026-11-03T11:32:42.269Z"
+    }
+  ],
+  "visits": [
+    {
+      "id": "v-1",
+      "timestamp": "2026-11-04T13:32:42.269Z",
+      "visitorId": "vis-1"
+    },
+    {
+      "id": "v-2",
+      "timestamp": "2026-11-04T16:32:42.269Z",
+      "visitorId": "vis-2"
+    },
+    {
+      "id": "v-3",
+      "timestamp": "2026-11-05T12:32:42.269Z",
+      "visitorId": "vis-3"
+    },
+    {
+      "id": "v-4",
+      "timestamp": "2026-11-05T15:32:42.269Z",
+      "visitorId": "vis-4"
+    },
+    {
+      "id": "v-5",
+      "timestamp": "2026-11-06T14:32:42.269Z",
+      "visitorId": "vis-5"
+    },
+    {
+      "id": "v-6",
+      "timestamp": "2026-11-06T18:32:42.269Z",
+      "visitorId": "vis-6"
+    },
+    {
+      "id": "v-7",
+      "timestamp": "2026-11-07T13:32:42.269Z",
+      "visitorId": "vis-7"
+    },
+    {
+      "id": "v-8",
+      "timestamp": "2026-11-07T16:32:42.269Z",
+      "visitorId": "vis-8"
+    },
+    {
+      "id": "v-9",
+      "timestamp": "2026-11-08T14:32:42.269Z",
+      "visitorId": "vis-9"
+    },
+    {
+      "id": "v-10",
+      "timestamp": "2026-11-08T19:32:42.269Z",
+      "visitorId": "vis-10"
+    },
+    {
+      "id": "v-11",
+      "timestamp": "2026-11-09T15:32:42.269Z",
+      "visitorId": "vis-11"
+    },
+    {
+      "id": "v-12",
+      "timestamp": "2026-11-09T20:32:42.269Z",
+      "visitorId": "vis-12"
+    },
+    {
+      "id": "v-13",
+      "timestamp": "2026-11-10T09:32:42.269Z",
+      "visitorId": "vis-13"
+    },
+    {
+      "id": "v-14",
+      "timestamp": "2026-11-10T10:32:42.269Z",
+      "visitorId": "vis-14"
+    }
+  ],
+  "clicks": [
+    {
+      "id": "c-1",
+      "linkId": "link-2",
+      "timestamp": "2026-11-05T13:32:42.269Z",
+      "visitorId": "vis-3"
+    },
+    {
+      "id": "c-2",
+      "linkId": "link-2",
+      "timestamp": "2026-11-06T15:32:42.269Z",
+      "visitorId": "vis-5"
+    },
+    {
+      "id": "c-3",
+      "linkId": "link-3",
+      "timestamp": "2026-11-06T19:32:42.269Z",
+      "visitorId": "vis-6"
+    },
+    {
+      "id": "c-4",
+      "linkId": "link-3",
+      "timestamp": "2026-11-07T14:32:42.269Z",
+      "visitorId": "vis-7"
+    },
+    {
+      "id": "c-5",
+      "linkId": "link-3",
+      "timestamp": "2026-11-08T15:32:42.269Z",
+      "visitorId": "vis-9"
+    },
+    {
+      "id": "c-6",
+      "linkId": "link-4",
+      "timestamp": "2026-11-07T17:32:42.269Z",
+      "visitorId": "vis-8"
+    },
+    {
+      "id": "c-7",
+      "linkId": "link-4",
+      "timestamp": "2026-11-08T20:32:42.269Z",
+      "visitorId": "vis-10"
+    },
+    {
+      "id": "c-8",
+      "linkId": "link-4",
+      "timestamp": "2026-11-09T16:32:42.269Z",
+      "visitorId": "vis-11"
+    },
+    {
+      "id": "c-9",
+      "linkId": "link-4",
+      "timestamp": "2026-11-09T21:32:42.269Z",
+      "visitorId": "vis-12"
+    },
+    {
+      "id": "c-10",
+      "linkId": "link-4",
+      "timestamp": "2026-11-10T10:32:42.269Z",
+      "visitorId": "vis-13"
+    }
+  ]
+}

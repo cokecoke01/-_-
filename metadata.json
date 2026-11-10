@@ -1,0 +1,6 @@
+{
+  "name": "MyLink - Personal Branding Landing Page",
+  "description": "개인의 정체성과 개성을 보여주는 맞춤형 링크 통합 개인 브랜딩 랜딩페이지",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
