@@ -4,16 +4,47 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Eye, Sparkles, RefreshCw, AlertCircle, RotateCcw, Download } from 'lucide-react';
-import { UserProfile, LinkItem, IconType } from './types';
+import { Eye, RefreshCw, AlertCircle, RotateCcw, Download } from 'lucide-react';
+import { UserProfile, LinkItem } from './types';
 import { Header } from './components/Header';
 import { ProfileCard } from './components/ProfileCard';
 import { LinkCard } from './components/LinkCard';
-import { LinkModal } from './components/LinkModal';
-import { DeleteModal } from './components/DeleteModal';
 import { StatsModal } from './components/StatsModal';
 import { ProfileModal } from './components/ProfileModal';
 import { Toast } from './components/Toast';
+
+const DEFAULT_LINKS: LinkItem[] = [
+  {
+    id: 'link-1',
+    title: '깃허브',
+    url: 'https://github.com/cokecoke01/-_-',
+    icon: 'github',
+    description: 'GitHub 저장소 및 프로젝트 코드',
+    clicks: 3,
+    order: 0,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'link-2',
+    title: '구글',
+    url: 'https://google.com',
+    icon: 'google',
+    description: '구글 검색 및 공식 프로필',
+    clicks: 2,
+    order: 1,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: 'link-3',
+    title: '내 블로그',
+    url: 'https://blog.naver.com/ehrtnfl9700',
+    icon: 'blog',
+    description: '네이버 블로그 (인사이트 및 기획 일기)',
+    clicks: 5,
+    order: 2,
+    createdAt: new Date().toISOString(),
+  },
+];
 
 export default function App() {
   const [profile, setProfile] = useState<UserProfile>({
@@ -25,21 +56,17 @@ export default function App() {
     avatar: '/cat-avatar.svg',
   });
 
-  const [links, setLinks] = useState<LinkItem[]>([]);
+  const [links, setLinks] = useState<LinkItem[]>(DEFAULT_LINKS);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(true);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
 
   // Modals state
-  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-  const [editingLink, setEditingLink] = useState<LinkItem | null>(null);
-  const [deletingLink, setDeletingLink] = useState<LinkItem | null>(null);
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   // Toast state
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -74,7 +101,7 @@ export default function App() {
         if (profileData.success && profileData.profile) {
           setProfile(profileData.profile);
         }
-        if (linksData.success && Array.isArray(linksData.links)) {
+        if (linksData.success && Array.isArray(linksData.links) && linksData.links.length > 0) {
           setLinks(linksData.links);
         }
 
@@ -95,7 +122,7 @@ export default function App() {
     initData();
   }, []);
 
-  // Handle clicking a link card
+  // Handle clicking a link card (CTA)
   const handleLinkClick = async (link: LinkItem) => {
     const visitorId = getVisitorId();
 
@@ -118,114 +145,6 @@ export default function App() {
     // Navigate to target URL in new tab
     if (link.url) {
       window.open(link.url, '_blank', 'noopener,noreferrer');
-    }
-  };
-
-  // Save new or edited link
-  const handleSaveLink = async (formData: {
-    title: string;
-    url: string;
-    icon: IconType;
-    description?: string;
-  }) => {
-    try {
-      if (editingLink) {
-        // Update existing link
-        const res = await fetch(`/api/links/${editingLink.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
-        const data = await res.json();
-        if (data.success && data.link) {
-          setLinks((prev) =>
-            prev.map((l) => (l.id === editingLink.id ? data.link : l))
-          );
-          showToast('링크가 성공적으로 수정되었습니다.');
-        }
-      } else {
-        // Create new link
-        const res = await fetch('/api/links', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
-        const data = await res.json();
-        if (data.success && data.link) {
-          setLinks((prev) => [...prev, data.link]);
-          showToast('새로운 링크가 추가되었습니다.');
-        }
-      }
-      setIsLinkModalOpen(false);
-      setEditingLink(null);
-    } catch (err) {
-      console.error('Failed to save link:', err);
-      showToast('링크 저장 중 오류가 발생했습니다.');
-    }
-  };
-
-  // Delete link
-  const handleConfirmDelete = async () => {
-    if (!deletingLink) return;
-    try {
-      const res = await fetch(`/api/links/${deletingLink.id}`, {
-        method: 'DELETE',
-      });
-      const data = await res.json();
-      if (data.success) {
-        setLinks((prev) => prev.filter((l) => l.id !== deletingLink.id));
-        showToast('링크가 삭제되었습니다.');
-      }
-      setDeletingLink(null);
-    } catch (err) {
-      console.error('Failed to delete link:', err);
-      showToast('링크 삭제 중 오류가 발생했습니다.');
-    }
-  };
-
-  // Move link up
-  const handleMoveUp = async (link: LinkItem) => {
-    const index = links.findIndex((l) => l.id === link.id);
-    if (index <= 0) return;
-
-    const newLinks = [...links];
-    const temp = newLinks[index - 1];
-    newLinks[index - 1] = newLinks[index];
-    newLinks[index] = temp;
-
-    setLinks(newLinks);
-
-    try {
-      await fetch('/api/links-order', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ linkIds: newLinks.map((l) => l.id) }),
-      });
-    } catch (err) {
-      console.error('Failed to update link order:', err);
-    }
-  };
-
-  // Move link down
-  const handleMoveDown = async (link: LinkItem) => {
-    const index = links.findIndex((l) => l.id === link.id);
-    if (index >= links.length - 1) return;
-
-    const newLinks = [...links];
-    const temp = newLinks[index + 1];
-    newLinks[index + 1] = newLinks[index];
-    newLinks[index] = temp;
-
-    setLinks(newLinks);
-
-    try {
-      await fetch('/api/links-order', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ linkIds: newLinks.map((l) => l.id) }),
-      });
-    } catch (err) {
-      console.error('Failed to update link order:', err);
     }
   };
 
@@ -254,9 +173,7 @@ export default function App() {
     const url = window.location.href;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(url).then(() => {
-        setCopied(true);
         showToast('링크가 복사되었습니다');
-        setTimeout(() => setCopied(false), 2000);
       });
     } else {
       showToast('링크가 복사되었습니다');
@@ -274,7 +191,7 @@ export default function App() {
       if (data.success && data.data) {
         setProfile(data.data.profile);
         setLinks(data.data.links);
-        showToast('기본 샘플 데이터로 복원되었습니다.');
+        showToast('기본 3대 링크 데이터로 복원되었습니다.');
       }
     } catch (err) {
       console.error('Failed to reset:', err);
@@ -286,7 +203,7 @@ export default function App() {
     if (isAdmin) {
       setIsAdmin(false);
       setIsPreviewMode(true);
-      showToast('로그아웃되었습니다. 방문자 모드로 전환되었습니다.');
+      showToast('로그아웃되었습니다 (방문자 시점).');
     } else {
       setIsAdmin(true);
       setIsPreviewMode(false);
@@ -294,7 +211,6 @@ export default function App() {
     }
   };
 
-  // Active viewing mode
   const effectiveIsAdmin = isAdmin && !isPreviewMode;
 
   return (
@@ -317,7 +233,7 @@ export default function App() {
           <div className="max-w-xl mx-auto flex items-center justify-between w-full">
             <span className="flex items-center gap-1.5">
               <Eye className="w-4 h-4" />
-              <span>방문자 시점 미리보기 중입니다 (수정/삭제 비활성화, 클릭 시 실제 조회수 증가)</span>
+              <span>방문자 시점 미리보기 중입니다 (클릭 시 실제 조회수 증가)</span>
             </span>
             <button
               onClick={() => setIsPreviewMode(false)}
@@ -338,53 +254,19 @@ export default function App() {
           onEditProfile={() => setIsProfileModalOpen(true)}
         />
 
-        {/* Add Link CTA Button (Only in Admin Mode) */}
-        {effectiveIsAdmin && (
-          <div className="mt-2 mb-6">
-            <button
-              onClick={() => {
-                setEditingLink(null);
-                setIsLinkModalOpen(true);
-              }}
-              className="w-full py-3.5 px-6 bg-[#1746E8] hover:bg-[#1238BE] text-white font-semibold text-base rounded-md shadow-xs hover:shadow-md transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
-            >
-              <Plus className="w-5 h-5 stroke-[2.5]" />
-              <span>새로운 링크 추가하기</span>
-            </button>
-          </div>
-        )}
-
-        {/* Link Cards List Section */}
-        <section className="mt-2 space-y-3.5" aria-label="등록된 링크 목록">
-          {loading ? (
+        {/* 3 Core CTA Links List Section */}
+        <section className="mt-4 space-y-3.5" aria-label="3대 핵심 링크 목록">
+          {loading && links.length === 0 ? (
             <div className="py-16 flex flex-col items-center justify-center text-gray-400">
               <RefreshCw className="w-8 h-8 animate-spin text-[#1746E8] mb-3" />
               <p className="text-sm font-medium">링크 목록을 불러오는 중...</p>
             </div>
-          ) : links.length === 0 ? (
-            <div className="py-12 px-6 text-center bg-white border border-dashed border-gray-300 rounded-lg">
-              <AlertCircle className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-              <p className="text-base font-bold text-gray-800">등록된 링크가 없습니다</p>
-              <p className="text-xs text-gray-500 mt-1">
-                상단의 '+ 새로운 링크 추가하기' 버튼을 눌러 첫 번째 링크를 등록해보세요.
-              </p>
-            </div>
           ) : (
-            links.map((link, idx) => (
+            links.map((link) => (
               <LinkCard
                 key={link.id}
                 link={link}
-                isAdmin={effectiveIsAdmin}
-                isFirst={idx === 0}
-                isLast={idx === links.length - 1}
                 onClick={handleLinkClick}
-                onEdit={(item) => {
-                  setEditingLink(item);
-                  setIsLinkModalOpen(true);
-                }}
-                onDelete={(item) => setDeletingLink(item)}
-                onMoveUp={handleMoveUp}
-                onMoveDown={handleMoveDown}
               />
             ))
           )}
@@ -415,23 +297,6 @@ export default function App() {
       </main>
 
       {/* Modals */}
-      <LinkModal
-        isOpen={isLinkModalOpen}
-        onClose={() => {
-          setIsLinkModalOpen(false);
-          setEditingLink(null);
-        }}
-        onSave={handleSaveLink}
-        editingLink={editingLink}
-      />
-
-      <DeleteModal
-        isOpen={Boolean(deletingLink)}
-        link={deletingLink}
-        onClose={() => setDeletingLink(null)}
-        onConfirm={handleConfirmDelete}
-      />
-
       <StatsModal
         isOpen={isStatsModalOpen}
         onClose={() => setIsStatsModalOpen(false)}
