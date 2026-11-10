@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Eye, Sparkles, RefreshCw, AlertCircle, RotateCcw } from 'lucide-react';
+import { Plus, Eye, Sparkles, RefreshCw, AlertCircle, RotateCcw, Download } from 'lucide-react';
 import { UserProfile, LinkItem, IconType } from './types';
 import { Header } from './components/Header';
 import { ProfileCard } from './components/ProfileCard';
@@ -394,6 +394,15 @@ export default function App() {
         <div className="mt-12 pt-6 border-t border-gray-200/80 text-center text-xs text-gray-400 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p>© 2026 MyLink · {profile.name} Personal Branding</p>
           <div className="flex items-center gap-3">
+            <a
+              href="/MyLink-project.zip"
+              download="MyLink-project.zip"
+              className="text-[#1746E8] hover:underline inline-flex items-center gap-1 font-semibold"
+              title="GitHub 업로드용 MyLink 전체 폴더 다운로드 (.zip)"
+            >
+              <Download className="w-3.5 h-3.5" /> MyLink 폴더 다운로드 (.zip)
+            </a>
+            <span>·</span>
             <button
               onClick={handleResetDemo}
               className="text-gray-400 hover:text-gray-600 inline-flex items-center gap-1"
